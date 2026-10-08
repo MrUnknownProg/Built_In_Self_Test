@@ -1,127 +1,315 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 20.03.2026 21:27:14
-// Design Name: 
-// Module Name: control_logic
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module control_logic #(
-    parameter ADDR_WIDTH = 8
+    parameter ADDR_WIDTH = 10
 )(
-    input  wire clk_i,
-    input  wire rst_i,
-    input  wire start_i,
-    input  wire addr_done_i,
+    input  wire        clk_i,
+    input  wire        rst_i,
+    input  wire        start_i,
 
-    output reg addr_en_o,
-    output reg addr_rst_o,
-    output reg we_o,
-    output reg compare_en_o,
-    output reg done_o
+    input  wire        addr_done_i,
+
+    // LFSR fault-address generation
+    input  wire        fault_addr_valid_i,
+
+    output reg         addr_en_o,
+    output reg         addr_rst_o,
+
+    output reg         we_o,
+    output reg         compare_en_o,
+
+    output reg         done_o,
+
+    output reg         fault_generate_o,
+
+    output reg [1:0]   pattern_sel_o,
+
+    output reg         addr_dir_o
 );
 
-    // State encoding (Verilog style)
-    parameter IDLE         = 3'b000;
-    parameter INIT         = 3'b001;
-    parameter WRITE        = 3'b010;
-    parameter READ_SETUP   = 3'b011;
-    parameter READ_WAIT    = 3'b100;
-    parameter READ_COMPARE = 3'b101;
-    parameter DONE         = 3'b110;
+    // =========================================================
+    // FSM STATES
+    // =========================================================
 
-    reg [2:0] state, next_state;
+    localparam [3:0] IDLE         = 4'd0;
+    localparam [3:0] GEN_START    = 4'd1;
+    localparam [3:0] GEN_WAIT     = 4'd2;
+    localparam [3:0] INIT         = 4'd3;
+    localparam [3:0] WRITE        = 4'd4;
+    localparam [3:0] READ_SETUP   = 4'd5;
+    localparam [3:0] READ_WAIT    = 4'd6;
+    localparam [3:0] READ_COMPARE = 4'd7;
+    localparam [3:0] READ_ADVANCE = 4'd8;
+    localparam [3:0] DONE         = 4'd9;
 
-    // State register
+    reg [3:0] state;
+    reg [3:0] next_state;
+
+    // =========================================================
+    // STATE REGISTER
+    // =========================================================
+
     always @(posedge clk_i) begin
+
         if (rst_i)
             state <= IDLE;
         else
             state <= next_state;
+
     end
 
-    // Next state logic
+    // =========================================================
+    // NEXT STATE LOGIC
+    // =========================================================
+
     always @(*) begin
+
+        next_state = state;
+
         case (state)
 
-            IDLE:
-                next_state = (start_i) ? INIT : IDLE;
+            // -------------------------------------------------
+            // IDLE
+            // -------------------------------------------------
 
-            INIT:
-                next_state = WRITE;
+            IDLE: begin
 
-            WRITE:
-                next_state = (addr_done_i) ? READ_SETUP : WRITE;
+                if (start_i)
+                    next_state = GEN_START;
 
-            READ_SETUP:
-                next_state = READ_WAIT;
+            end
 
-            READ_WAIT:
-                next_state = READ_COMPARE;
+            // -------------------------------------------------
+            // Start LFSR fault-address generation
+            // -------------------------------------------------
 
-            READ_COMPARE:
-                next_state = (addr_done_i) ? DONE : READ_WAIT;
+            GEN_START: begin
 
-            DONE:
-                next_state = DONE;
+                next_state = GEN_WAIT;
 
-            default:
-                next_state = IDLE;
+            end
 
-        endcase
-    end
+            // -------------------------------------------------
+            // Wait until all 8 LFSR addresses are generated
+            // -------------------------------------------------
 
-    // Output logic
-    always @(*) begin
-        // default values
-        addr_en_o    = 0;
-        addr_rst_o   = 0;
-        we_o         = 0;
-        compare_en_o = 0;
-        done_o       = 0;
+            GEN_WAIT: begin
 
-        case (state)
+                if (fault_addr_valid_i)
+                    next_state = INIT;
+
+            end
+
+            // -------------------------------------------------
+            // Initialize memory address
+            // -------------------------------------------------
 
             INIT: begin
-                addr_rst_o = 1;
+
+                next_state = WRITE;
+
             end
+
+            // -------------------------------------------------
+            // Write 0 to all normal memory addresses
+            // 0 -> 255
+            // -------------------------------------------------
 
             WRITE: begin
-                addr_en_o = 1;
-                we_o      = 1;
+
+                if (addr_done_i)
+                    next_state = READ_SETUP;
+
             end
+
+            // -------------------------------------------------
+            // Reset address to 0 before read
+            // -------------------------------------------------
 
             READ_SETUP: begin
-                addr_rst_o = 1;
+
+                next_state = READ_WAIT;
+
             end
+
+            // -------------------------------------------------
+            // Wait one clock for synchronous BRAM read
+            // -------------------------------------------------
 
             READ_WAIT: begin
-                addr_en_o = 1;
+
+                next_state = READ_COMPARE;
+
             end
+
+            // -------------------------------------------------
+            // Compare current BRAM output
+            //
+            // IMPORTANT:
+            // Address is NOT incremented here.
+            // This keeps addr_i aligned with doutb.
+            // -------------------------------------------------
 
             READ_COMPARE: begin
-                compare_en_o = 1;
+
+                if (addr_done_i)
+                    next_state = DONE;
+                else
+                    next_state = READ_ADVANCE;
+
             end
 
+            // -------------------------------------------------
+            // Advance to next address
+            // -------------------------------------------------
+
+            READ_ADVANCE: begin
+
+                next_state = READ_WAIT;
+
+            end
+
+            // -------------------------------------------------
+            // MBIST complete
+            //
+            // A new start is accepted without reset.
+            // -------------------------------------------------
+
             DONE: begin
-                done_o = 1;
+
+                if (start_i)
+                    next_state = GEN_START;
+
+            end
+
+            default: begin
+
+                next_state = IDLE;
+
             end
 
         endcase
+
+    end
+
+    // =========================================================
+    // OUTPUT LOGIC
+    // =========================================================
+
+    always @(*) begin
+
+        // Defaults
+        addr_en_o        = 1'b0;
+        addr_rst_o       = 1'b0;
+        we_o             = 1'b0;
+        compare_en_o     = 1'b0;
+        done_o           = 1'b0;
+        fault_generate_o = 1'b0;
+        pattern_sel_o    = 2'b00;
+
+        // UP direction
+        addr_dir_o       = 1'b1;
+
+        case (state)
+
+            // -------------------------------------------------
+            // Start LFSR
+            // -------------------------------------------------
+
+            GEN_START: begin
+
+                fault_generate_o = 1'b1;
+
+            end
+
+            // -------------------------------------------------
+            // Initialize address generator to 0
+            // -------------------------------------------------
+
+            INIT: begin
+
+                addr_rst_o = 1'b1;
+
+            end
+
+            // -------------------------------------------------
+            // Write zeros
+            // -------------------------------------------------
+
+            WRITE: begin
+
+                addr_en_o     = 1'b1;
+                we_o          = 1'b1;
+                pattern_sel_o = 2'b00;
+                addr_dir_o    = 1'b1;
+
+            end
+
+            // -------------------------------------------------
+            // Reset address before read
+            // -------------------------------------------------
+
+            READ_SETUP: begin
+
+                addr_rst_o = 1'b1;
+
+            end
+
+            // -------------------------------------------------
+            // BRAM latency
+            // -------------------------------------------------
+
+            READ_WAIT: begin
+
+                addr_en_o     = 1'b0;
+                compare_en_o  = 1'b0;
+                pattern_sel_o = 2'b00;
+                addr_dir_o    = 1'b1;
+
+            end
+
+            // -------------------------------------------------
+            // Compare current address/data
+            // -------------------------------------------------
+
+            READ_COMPARE: begin
+
+                addr_en_o     = 1'b0;
+                compare_en_o  = 1'b1;
+                pattern_sel_o = 2'b00;
+                addr_dir_o    = 1'b1;
+
+            end
+
+            // -------------------------------------------------
+            // Increment address after comparison
+            // -------------------------------------------------
+
+            READ_ADVANCE: begin
+
+                addr_en_o     = 1'b1;
+                compare_en_o  = 1'b0;
+                pattern_sel_o = 2'b00;
+                addr_dir_o    = 1'b1;
+
+            end
+
+            // -------------------------------------------------
+            // DONE
+            // -------------------------------------------------
+
+            DONE: begin
+
+                done_o = 1'b1;
+
+            end
+
+            default: begin
+
+            end
+
+        endcase
+
     end
 
 endmodule

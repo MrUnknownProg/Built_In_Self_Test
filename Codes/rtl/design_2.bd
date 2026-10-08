@@ -1,0 +1,816 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0xD43CA8FED43CA8FE",
+      "device": "xc7s50csga324-1",
+      "name": "design_2",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "None",
+      "tool_version": "2025.2",
+      "validated": "true"
+    },
+    "design_tree": {
+      "blk_mem_gen_0": "",
+      "addr_gen_0": "",
+      "comparator_0": "",
+      "data_gen_0": "",
+      "control_logic_0": "",
+      "xlconstant_0": "",
+      "fault_inject_0": "",
+      "repair_controller_0": "",
+      "address_remapper_0": "",
+      "fault_addr_lfsr_0": "",
+      "fault_order_capture_0": ""
+    },
+    "ports": {
+      "clk_i_0": {
+        "direction": "I"
+      },
+      "rst_i_0": {
+        "direction": "I"
+      },
+      "start_i_0": {
+        "direction": "I"
+      },
+      "done_o_0": {
+        "direction": "O"
+      },
+      "fail_flag_o_0": {
+        "direction": "O"
+      },
+      "fail_count_o_0": {
+        "direction": "O",
+        "left": "7",
+        "right": "0"
+      },
+      "repair_count_o_0": {
+        "direction": "O",
+        "left": "9",
+        "right": "0"
+      },
+      "repair_full_o_0": {
+        "direction": "O"
+      },
+      "fault_addr_valid_o": {
+        "direction": "O"
+      },
+      "fault_addr_o": {
+        "direction": "O",
+        "left": "9",
+        "right": "0"
+      },
+      "repair_reset_i_0": {
+        "direction": "I"
+      },
+      "repaired_logical_addr_o_0": {
+        "direction": "O",
+        "left": "9",
+        "right": "0"
+      },
+      "repaired_physical_addr_o_0": {
+        "direction": "O",
+        "left": "9",
+        "right": "0"
+      },
+      "repaired_valid_o_0": {
+        "direction": "O"
+      },
+      "valid_o_0": {
+        "direction": "O"
+      },
+      "fault_switch_i_0": {
+        "direction": "I",
+        "left": "7",
+        "right": "0"
+      },
+      "fault_hit_o_0": {
+        "direction": "O"
+      }
+    },
+    "components": {
+      "blk_mem_gen_0": {
+        "vlnv": "xilinx.com:ip:blk_mem_gen:8.4",
+        "ip_revision": "12",
+        "xci_name": "design_2_blk_mem_gen_0_0",
+        "xci_path": "ip\\design_2_blk_mem_gen_0_0\\design_2_blk_mem_gen_0_0.xci",
+        "inst_hier_path": "blk_mem_gen_0",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "Assume_Synchronous_Clk": {
+            "value": "true"
+          },
+          "Disable_Collision_Warnings": {
+            "value": "true"
+          },
+          "Memory_Type": {
+            "value": "Simple_Dual_Port_RAM"
+          },
+          "Operating_Mode_A": {
+            "value": "NO_CHANGE"
+          },
+          "Write_Depth_A": {
+            "value": "1024"
+          },
+          "Write_Width_A": {
+            "value": "32"
+          },
+          "use_bram_block": {
+            "value": "Stand_Alone"
+          }
+        }
+      },
+      "addr_gen_0": {
+        "vlnv": "xilinx.com:module_ref:addr_gen:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_2_addr_gen_0_0",
+        "xci_path": "ip\\design_2_addr_gen_0_0\\design_2_addr_gen_0_0.xci",
+        "inst_hier_path": "addr_gen_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "addr_gen",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk_i": {
+            "direction": "I"
+          },
+          "rst_i": {
+            "direction": "I"
+          },
+          "addr_en_i": {
+            "direction": "I"
+          },
+          "addr_rst_i": {
+            "direction": "I"
+          },
+          "addr_dir_i": {
+            "direction": "I"
+          },
+          "addr_o": {
+            "direction": "O",
+            "left": "9",
+            "right": "0"
+          },
+          "addr_done_o": {
+            "direction": "O"
+          }
+        }
+      },
+      "comparator_0": {
+        "vlnv": "xilinx.com:module_ref:comparator:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_2_comparator_0_0",
+        "xci_path": "ip\\design_2_comparator_0_0\\design_2_comparator_0_0.xci",
+        "inst_hier_path": "comparator_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "comparator",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk_i": {
+            "direction": "I"
+          },
+          "rst_i": {
+            "direction": "I"
+          },
+          "compare_en_i": {
+            "direction": "I"
+          },
+          "expected_data_i": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "read_data_i": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "addr_i": {
+            "direction": "I",
+            "left": "9",
+            "right": "0"
+          },
+          "fault_id_i": {
+            "direction": "I",
+            "left": "2",
+            "right": "0"
+          },
+          "fail_flag_o": {
+            "direction": "O"
+          },
+          "fail_count_o": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "fault_addr_o": {
+            "direction": "O",
+            "left": "9",
+            "right": "0"
+          },
+          "fault_addr_valid_o": {
+            "direction": "O"
+          },
+          "fault_id_o": {
+            "direction": "O",
+            "left": "2",
+            "right": "0"
+          }
+        }
+      },
+      "data_gen_0": {
+        "vlnv": "xilinx.com:module_ref:data_gen:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_2_data_gen_0_0",
+        "xci_path": "ip\\design_2_data_gen_0_0\\design_2_data_gen_0_0.xci",
+        "inst_hier_path": "data_gen_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "data_gen",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "pattern_sel_i": {
+            "direction": "I",
+            "left": "1",
+            "right": "0"
+          },
+          "data_o": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "control_logic_0": {
+        "vlnv": "xilinx.com:module_ref:control_logic:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_2_control_logic_0_0",
+        "xci_path": "ip\\design_2_control_logic_0_0\\design_2_control_logic_0_0.xci",
+        "inst_hier_path": "control_logic_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "control_logic",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk_i": {
+            "direction": "I"
+          },
+          "rst_i": {
+            "direction": "I"
+          },
+          "start_i": {
+            "direction": "I"
+          },
+          "addr_done_i": {
+            "direction": "I"
+          },
+          "fault_addr_valid_i": {
+            "direction": "I"
+          },
+          "addr_en_o": {
+            "direction": "O"
+          },
+          "addr_rst_o": {
+            "direction": "O"
+          },
+          "we_o": {
+            "direction": "O"
+          },
+          "compare_en_o": {
+            "direction": "O"
+          },
+          "done_o": {
+            "direction": "O"
+          },
+          "fault_generate_o": {
+            "direction": "O"
+          },
+          "pattern_sel_o": {
+            "direction": "O",
+            "left": "1",
+            "right": "0"
+          },
+          "addr_dir_o": {
+            "direction": "O"
+          }
+        }
+      },
+      "xlconstant_0": {
+        "vlnv": "xilinx.com:ip:xlconstant:1.1",
+        "ip_revision": "10",
+        "xci_name": "design_2_xlconstant_0_0",
+        "xci_path": "ip\\design_2_xlconstant_0_0\\design_2_xlconstant_0_0.xci",
+        "inst_hier_path": "xlconstant_0",
+        "has_run_ip_tcl": "true"
+      },
+      "fault_inject_0": {
+        "vlnv": "xilinx.com:module_ref:fault_inject:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_2_fault_inject_0_0",
+        "xci_path": "ip\\design_2_fault_inject_0_0\\design_2_fault_inject_0_0.xci",
+        "inst_hier_path": "fault_inject_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "fault_inject",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "data_i": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "addr_i": {
+            "direction": "I",
+            "left": "9",
+            "right": "0"
+          },
+          "fault_en_i": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "fault_addr_i": {
+            "direction": "I",
+            "left": "63",
+            "right": "0"
+          },
+          "data_o": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "fault_hit_o": {
+            "direction": "O"
+          },
+          "fault_id_o": {
+            "direction": "O",
+            "left": "2",
+            "right": "0"
+          }
+        }
+      },
+      "repair_controller_0": {
+        "vlnv": "xilinx.com:module_ref:repair_controller:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_2_repair_controller_0_0",
+        "xci_path": "ip\\design_2_repair_controller_0_0\\design_2_repair_controller_0_0.xci",
+        "inst_hier_path": "repair_controller_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "repair_controller",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk_i": {
+            "direction": "I"
+          },
+          "rst_i": {
+            "direction": "I"
+          },
+          "repair_reset_i": {
+            "direction": "I"
+          },
+          "mbist_done_i": {
+            "direction": "I"
+          },
+          "fault_addr_i": {
+            "direction": "I",
+            "left": "9",
+            "right": "0"
+          },
+          "fault_valid_i": {
+            "direction": "I"
+          },
+          "fault_id_i": {
+            "direction": "I",
+            "left": "2",
+            "right": "0"
+          },
+          "fault_order_i": {
+            "direction": "I",
+            "left": "23",
+            "right": "0"
+          },
+          "fault_order_count_i": {
+            "direction": "I",
+            "left": "3",
+            "right": "0"
+          },
+          "lookup_addr_i": {
+            "direction": "I",
+            "left": "9",
+            "right": "0"
+          },
+          "lookup_phys_addr_o": {
+            "direction": "O",
+            "left": "9",
+            "right": "0"
+          },
+          "lookup_valid_o": {
+            "direction": "O"
+          },
+          "repair_count_o": {
+            "direction": "O",
+            "left": "9",
+            "right": "0"
+          },
+          "repair_full_o": {
+            "direction": "O"
+          },
+          "repaired_logical_addr_o": {
+            "direction": "O",
+            "left": "9",
+            "right": "0"
+          },
+          "repaired_physical_addr_o": {
+            "direction": "O",
+            "left": "9",
+            "right": "0"
+          },
+          "repaired_valid_o": {
+            "direction": "O"
+          }
+        }
+      },
+      "address_remapper_0": {
+        "vlnv": "xilinx.com:module_ref:address_remapper:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_2_address_remapper_0_1",
+        "xci_path": "ip\\design_2_address_remapper_0_1\\design_2_address_remapper_0_1.xci",
+        "inst_hier_path": "address_remapper_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "address_remapper",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "logical_addr_i": {
+            "direction": "I",
+            "left": "9",
+            "right": "0"
+          },
+          "repair_addr_i": {
+            "direction": "I",
+            "left": "9",
+            "right": "0"
+          },
+          "repair_valid_i": {
+            "direction": "I"
+          },
+          "physical_addr_o": {
+            "direction": "O",
+            "left": "9",
+            "right": "0"
+          }
+        }
+      },
+      "fault_addr_lfsr_0": {
+        "vlnv": "xilinx.com:module_ref:fault_addr_lfsr:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_2_fault_addr_lfsr_0_0",
+        "xci_path": "ip\\design_2_fault_addr_lfsr_0_0\\design_2_fault_addr_lfsr_0_0.xci",
+        "inst_hier_path": "fault_addr_lfsr_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "fault_addr_lfsr",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk_i": {
+            "direction": "I"
+          },
+          "rst_i": {
+            "direction": "I"
+          },
+          "generate_i": {
+            "direction": "I"
+          },
+          "fault_addr_o": {
+            "direction": "O",
+            "left": "63",
+            "right": "0"
+          },
+          "valid_o": {
+            "direction": "O"
+          }
+        }
+      },
+      "fault_order_capture_0": {
+        "vlnv": "xilinx.com:module_ref:fault_order_capture:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_2_fault_order_capture_0_0",
+        "xci_path": "ip\\design_2_fault_order_capture_0_0\\design_2_fault_order_capture_0_0.xci",
+        "inst_hier_path": "fault_order_capture_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "fault_order_capture",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk_i": {
+            "direction": "I"
+          },
+          "rst_i": {
+            "direction": "I"
+          },
+          "repair_reset_i": {
+            "direction": "I"
+          },
+          "fault_switch_i": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "active_faults_o": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "fault_order_o": {
+            "direction": "O",
+            "left": "23",
+            "right": "0"
+          },
+          "fault_order_count_o": {
+            "direction": "O",
+            "left": "3",
+            "right": "0"
+          }
+        }
+      }
+    },
+    "nets": {
+      "addr_gen_0_addr_done_o": {
+        "ports": [
+          "addr_gen_0/addr_done_o",
+          "control_logic_0/addr_done_i"
+        ]
+      },
+      "addr_gen_0_addr_o": {
+        "ports": [
+          "addr_gen_0/addr_o",
+          "repair_controller_0/lookup_addr_i",
+          "comparator_0/addr_i",
+          "address_remapper_0/logical_addr_i"
+        ]
+      },
+      "address_remapper_0_physical_addr_o": {
+        "ports": [
+          "address_remapper_0/physical_addr_o",
+          "blk_mem_gen_0/addrb",
+          "blk_mem_gen_0/addra",
+          "fault_inject_0/addr_i"
+        ]
+      },
+      "blk_mem_gen_0_doutb": {
+        "ports": [
+          "blk_mem_gen_0/doutb",
+          "fault_inject_0/data_i"
+        ]
+      },
+      "clk_i_0_1": {
+        "ports": [
+          "clk_i_0",
+          "blk_mem_gen_0/clka",
+          "blk_mem_gen_0/clkb",
+          "fault_order_capture_0/clk_i",
+          "control_logic_0/clk_i",
+          "repair_controller_0/clk_i",
+          "comparator_0/clk_i",
+          "addr_gen_0/clk_i",
+          "fault_addr_lfsr_0/clk_i"
+        ]
+      },
+      "comparator_0_fail_count_o": {
+        "ports": [
+          "comparator_0/fail_count_o",
+          "fail_count_o_0"
+        ]
+      },
+      "comparator_0_fail_flag_o": {
+        "ports": [
+          "comparator_0/fail_flag_o",
+          "fail_flag_o_0"
+        ]
+      },
+      "comparator_0_fault_addr_o": {
+        "ports": [
+          "comparator_0/fault_addr_o",
+          "fault_addr_o",
+          "repair_controller_0/fault_addr_i"
+        ]
+      },
+      "comparator_0_fault_addr_valid_o": {
+        "ports": [
+          "comparator_0/fault_addr_valid_o",
+          "fault_addr_valid_o",
+          "repair_controller_0/fault_valid_i"
+        ]
+      },
+      "comparator_0_fault_id_o": {
+        "ports": [
+          "comparator_0/fault_id_o",
+          "repair_controller_0/fault_id_i"
+        ]
+      },
+      "control_logic_0_addr_dir_o": {
+        "ports": [
+          "control_logic_0/addr_dir_o",
+          "addr_gen_0/addr_dir_i"
+        ]
+      },
+      "control_logic_0_addr_en_o": {
+        "ports": [
+          "control_logic_0/addr_en_o",
+          "addr_gen_0/addr_en_i"
+        ]
+      },
+      "control_logic_0_addr_rst_o": {
+        "ports": [
+          "control_logic_0/addr_rst_o",
+          "addr_gen_0/addr_rst_i"
+        ]
+      },
+      "control_logic_0_compare_en_o": {
+        "ports": [
+          "control_logic_0/compare_en_o",
+          "comparator_0/compare_en_i"
+        ]
+      },
+      "control_logic_0_done_o": {
+        "ports": [
+          "control_logic_0/done_o",
+          "done_o_0",
+          "repair_controller_0/mbist_done_i"
+        ]
+      },
+      "control_logic_0_fault_generate_o": {
+        "ports": [
+          "control_logic_0/fault_generate_o",
+          "fault_addr_lfsr_0/generate_i"
+        ]
+      },
+      "control_logic_0_pattern_sel_o": {
+        "ports": [
+          "control_logic_0/pattern_sel_o",
+          "data_gen_0/pattern_sel_i"
+        ]
+      },
+      "control_logic_0_we_o": {
+        "ports": [
+          "control_logic_0/we_o",
+          "blk_mem_gen_0/wea"
+        ]
+      },
+      "data_gen_0_data_o": {
+        "ports": [
+          "data_gen_0/data_o",
+          "blk_mem_gen_0/dina",
+          "comparator_0/expected_data_i"
+        ]
+      },
+      "fault_addr_lfsr_0_fault_addr_o": {
+        "ports": [
+          "fault_addr_lfsr_0/fault_addr_o",
+          "fault_inject_0/fault_addr_i"
+        ]
+      },
+      "fault_addr_lfsr_0_valid_o": {
+        "ports": [
+          "fault_addr_lfsr_0/valid_o",
+          "valid_o_0",
+          "control_logic_0/fault_addr_valid_i"
+        ]
+      },
+      "fault_inject_0_data_o": {
+        "ports": [
+          "fault_inject_0/data_o",
+          "comparator_0/read_data_i"
+        ]
+      },
+      "fault_inject_0_fault_hit_o": {
+        "ports": [
+          "fault_inject_0/fault_hit_o",
+          "fault_hit_o_0"
+        ]
+      },
+      "fault_inject_0_fault_id_o": {
+        "ports": [
+          "fault_inject_0/fault_id_o",
+          "comparator_0/fault_id_i"
+        ]
+      },
+      "fault_order_capture_0_active_faults_o": {
+        "ports": [
+          "fault_order_capture_0/active_faults_o",
+          "fault_inject_0/fault_en_i"
+        ]
+      },
+      "fault_order_capture_0_fault_order_count_o": {
+        "ports": [
+          "fault_order_capture_0/fault_order_count_o",
+          "repair_controller_0/fault_order_count_i"
+        ]
+      },
+      "fault_order_capture_0_fault_order_o": {
+        "ports": [
+          "fault_order_capture_0/fault_order_o",
+          "repair_controller_0/fault_order_i"
+        ]
+      },
+      "fault_switch_i_0_1": {
+        "ports": [
+          "fault_switch_i_0",
+          "fault_order_capture_0/fault_switch_i"
+        ]
+      },
+      "repair_controller_0_lookup_phys_addr_o": {
+        "ports": [
+          "repair_controller_0/lookup_phys_addr_o",
+          "address_remapper_0/repair_addr_i"
+        ]
+      },
+      "repair_controller_0_lookup_valid_o": {
+        "ports": [
+          "repair_controller_0/lookup_valid_o",
+          "address_remapper_0/repair_valid_i"
+        ]
+      },
+      "repair_controller_0_repair_count_o": {
+        "ports": [
+          "repair_controller_0/repair_count_o",
+          "repair_count_o_0"
+        ]
+      },
+      "repair_controller_0_repair_full_o": {
+        "ports": [
+          "repair_controller_0/repair_full_o",
+          "repair_full_o_0"
+        ]
+      },
+      "repair_controller_0_repaired_logical_addr_o": {
+        "ports": [
+          "repair_controller_0/repaired_logical_addr_o",
+          "repaired_logical_addr_o_0"
+        ]
+      },
+      "repair_controller_0_repaired_physical_addr_o": {
+        "ports": [
+          "repair_controller_0/repaired_physical_addr_o",
+          "repaired_physical_addr_o_0"
+        ]
+      },
+      "repair_controller_0_repaired_valid_o": {
+        "ports": [
+          "repair_controller_0/repaired_valid_o",
+          "repaired_valid_o_0"
+        ]
+      },
+      "repair_reset_i_0_1": {
+        "ports": [
+          "repair_reset_i_0",
+          "fault_order_capture_0/repair_reset_i",
+          "repair_controller_0/repair_reset_i"
+        ]
+      },
+      "rst_i_0_1": {
+        "ports": [
+          "rst_i_0",
+          "fault_order_capture_0/rst_i",
+          "control_logic_0/rst_i",
+          "repair_controller_0/rst_i",
+          "comparator_0/rst_i",
+          "addr_gen_0/rst_i",
+          "fault_addr_lfsr_0/rst_i"
+        ]
+      },
+      "start_i_0_1": {
+        "ports": [
+          "start_i_0",
+          "control_logic_0/start_i"
+        ]
+      },
+      "xlconstant_0_dout": {
+        "ports": [
+          "xlconstant_0/dout",
+          "blk_mem_gen_0/ena",
+          "blk_mem_gen_0/enb"
+        ]
+      }
+    }
+  }
+}
