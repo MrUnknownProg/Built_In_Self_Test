@@ -38,13 +38,11 @@ module fault_inject #(
 
         for (i = 0; i < NUM_FAULTS; i = i + 1) begin
 
-            if (!fault_hit_o &&
-                fault_en_i[i] &&
-                (addr_i[FAULT_ADDR_WIDTH-1:0] ==
-                 fault_addr_i[
-                     i*FAULT_ADDR_WIDTH +
-                     : FAULT_ADDR_WIDTH
-                 ])) begin
+              if (!fault_hit_o &&
+                  fault_en_i[i] &&
+                  (addr_i[ADDR_WIDTH-1:FAULT_ADDR_WIDTH] == 0) &&   // only the normal region (0-255) can be faulty
+                  (addr_i[FAULT_ADDR_WIDTH-1:0] ==
+                   fault_addr_i[i*FAULT_ADDR_WIDTH +: FAULT_ADDR_WIDTH])) begin
 
                 data_o =
                     ~data_i;
